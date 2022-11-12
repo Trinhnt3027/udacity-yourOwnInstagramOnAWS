@@ -31,11 +31,11 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   app.get( "/filteredimage", async ( req, res ) => {
     console.log("filteredimage get request:", req.query)
-    let image_url = req.query.image_url
+    let image_url: string = req.query.image_url
 
-    if (image_url !== undefined) {
-      const imgObj = filterImageFromURL(image_url)
-      imgObj.then((imageFile) => {
+    if (image_url) {
+      let imgObj : Promise<string> = filterImageFromURL(image_url)
+      imgObj.then((imageFile: string) => {
         res.sendFile(imageFile, function (err) {
           if (!err) {
             deleteLocalFiles([imageFile])

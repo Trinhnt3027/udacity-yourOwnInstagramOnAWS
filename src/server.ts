@@ -29,6 +29,29 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
 
+  app.get( "/filteredimage", async ( req, res ) => {
+    console.log("filteredimage get request:", req.query)
+    let image_url = req.query.image_url
+
+    if (image_url !== undefined) {
+      const imgObj = filterImageFromURL(image_url)
+      imgObj.then((imageFile) => {
+        res.sendFile(imageFile, function (err) {
+          if (!err) {
+            deleteLocalFiles([imageFile])
+          } 
+        })
+        // deleteLocalFiles([value])
+      }).catch((error) => {
+        console.log("image error: ", imgObj)
+        res.send("Get image error")
+     });
+    }
+    else {
+      res.send("URL format is incorrect! Try GET /filteredimage?image_url={{}}")
+    }
+  } );
+
   //! END @TODO1
   
   // Root Endpoint
